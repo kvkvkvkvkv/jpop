@@ -3,7 +3,7 @@ package com.jpop.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.jpop.dto.User;
+import com.jpop.model.User;
 
 public interface UserService {
 	

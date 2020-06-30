@@ -5,8 +5,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import com.jpop.dto.Book;
-import com.jpop.dto.User;
+import com.jpop.model.Book;
+import com.jpop.model.User;
 
 @Component
 public class DataInitialisation implements ApplicationRunner{

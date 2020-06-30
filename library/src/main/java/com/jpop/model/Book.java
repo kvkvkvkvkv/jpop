@@ -1,4 +1,4 @@
-package com.jpop.dto;
+package com.jpop.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,16 +11,15 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "User")
-public class User {
+@Table(name = "Book")
+public class Book {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "User_Id")
-	private Integer userId;
+	@Column(name = "Book_Id")
+	private Integer bookId;
 	
-	@Column(name = "User_Name")
-	private String userName;
-	
-	
+	@Column(name = "Book_Name")
+	private String bookName;
+
 }

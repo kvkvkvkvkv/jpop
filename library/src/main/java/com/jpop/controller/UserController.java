@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.jpop.dto.User;
 import com.jpop.exception.UserNotFoundException;
+import com.jpop.model.User;
 import com.jpop.service.UserService;
 
 @RestController

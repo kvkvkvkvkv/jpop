@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jpop.dto.User;
+import com.jpop.model.User;
 import com.jpop.repository.UserRepository;
 
 @Service
