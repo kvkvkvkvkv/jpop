@@ -11,15 +11,14 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "User")
 public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "User_Id")
+	@Column(name = "USER_ID")
 	private Integer userId;
 	
-	@Column(name = "User_Name")
+	@Column(name = "USER_NAME")
 	private String userName;
 	
 	

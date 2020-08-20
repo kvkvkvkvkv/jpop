@@ -2,7 +2,6 @@ package com.jpop.controller;
 
 import java.net.URI;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,29 +14,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.jpop.exception.BookNotFoundException;
+import com.jpop.dto.BookDTO;
 import com.jpop.model.Book;
+import com.jpop.service.BookMapper;
 import com.jpop.service.BookService;
 
 @RestController
 public class BookController {
 	
-	private static final String NO_BOOK_FOUND_FOR_ID = "No book found for id ";
 	@Autowired
 	BookService bookService;
+	 
+	@Autowired
+	BookMapper bookMapper;
 	
 	@GetMapping("/books")
-	public List<Book> getAllBooks() {
-		return bookService.getAllBooks();
+	public ResponseEntity<List<BookDTO>> getAllBooks() {
+		return ResponseEntity.ok(bookMapper.convertListToDTO(bookService.getAllBooks()));
 	}
 	
 	@GetMapping("/books/{book_id}")
-	public Book getBookById(@PathVariable("book_id") int bookId) {
-		return bookService.getBookById(bookId).orElseThrow(() -> new BookNotFoundException(NO_BOOK_FOUND_FOR_ID+bookId));
+	public ResponseEntity<BookDTO> getBookById(@PathVariable("book_id") int bookId) {
+		return ResponseEntity.ok(bookMapper.convertToDTO(bookService.getBookById(bookId)));
 	}
 	
 	@PostMapping("/books")
-	public ResponseEntity<Object> addBook(@RequestBody Book book) {
+	public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookDTO) {
+		Book book = bookMapper.convertToEntity(bookDTO);
 		Book newBook = bookService.addBook(book);
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -45,21 +48,19 @@ public class BookController {
 				.buildAndExpand(newBook.getBookId())
 				.toUri();
 		
-		return ResponseEntity.created(location).build();
+		return ResponseEntity.created(location).body(bookMapper.convertToDTO(newBook));
 		
 	}
 	
 	@DeleteMapping("/books/{book_id}")
-	public void deleteBook(@PathVariable("book_id") int bookId) {
-		Book book = bookService.getBookById(bookId).orElseThrow(()-> new BookNotFoundException(NO_BOOK_FOUND_FOR_ID+bookId));
-		bookService.deleteBook(book);
+	public ResponseEntity<Book> deleteBook(@PathVariable("book_id") int bookId) {
+		bookService.deleteBook(bookId);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/books/{book_id}")
-	public Book updateBook(@PathVariable("book_id") int bookId, @RequestBody Book book) {
-		
-		Book bookToUpdate = bookService.getBookById(bookId).orElseThrow(()-> new BookNotFoundException(NO_BOOK_FOUND_FOR_ID+bookId));
-		bookToUpdate.setBookName(book.getBookName());
-		return bookService.addBook(bookToUpdate);
+	public ResponseEntity<BookDTO> updateBook(@PathVariable("book_id") int bookId, @RequestBody BookDTO bookDTO) {
+		Book book = bookMapper.convertToEntity(bookDTO);
+		return ResponseEntity.ok(bookMapper.convertToDTO(bookService.updateBook(book,bookId)));
 	}
 }

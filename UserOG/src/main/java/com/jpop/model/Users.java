@@ -5,19 +5,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import lombok.Data;
 
 @Entity
 @Data
-public class Book {
+@Table(name = "Users")
+public class Users {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "BOOK_ID")
-	private Integer bookId;
+	@Column(name = "User_Id")
+	private Integer userId;
 	
-	@Column(name = "BOOK_NAME")
-	private String bookName;
-
+	@Column(name = "User_Name")
+	private String userName;
+	
+	
 }

@@ -26,39 +26,38 @@ public class UserController {
 	UserService userService;
 	
 	@GetMapping("/users")
-	public List<User> getAllUsers() {
-		return userService.getAllUsers();
+	public ResponseEntity<List<User>> getAllusers() {
+		return ResponseEntity.ok(userService.getAllUsers());
 	}
 	
 	@GetMapping("/users/{user_id}")
-	public User getUserById(@PathVariable("user_id") int userId) {
-		return userService.getUserById(userId).orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_FOR_ID+userId));
+	public ResponseEntity<User> getuserById(@PathVariable("user_id") int userId) {
+		return ResponseEntity.ok(userService.getUserById(userId).orElseThrow(() -> new UserNotFoundException(NO_USER_FOUND_FOR_ID+userId)));
 	}
 	
 	@PostMapping("/users")
-	public ResponseEntity<Object> addUser(@RequestBody User user) {
+	public ResponseEntity<User> addUser(@RequestBody User user) {
 		User newUser = userService.addUser(user);
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{userId}")
 				.buildAndExpand(newUser.getUserId())
 				.toUri();
-		
-		return ResponseEntity.created(location).build();
+		return ResponseEntity.created(location).body(newUser);
 		
 	}
 	
 	@DeleteMapping("/users/{user_id}")
-	public void deleteUser(@PathVariable("user_id") int userId) {
+	public ResponseEntity<User> deleteuser(@PathVariable("user_id") int userId) {
 		User user = userService.getUserById(userId).orElseThrow(()-> new UserNotFoundException(NO_USER_FOUND_FOR_ID+userId));
 		userService.deleteUser(user);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/users/{user_id}")
-	public User updateUser(@PathVariable("user_id") int userId, @RequestBody User user) {
-		
+	public ResponseEntity<User> updateuser(@PathVariable("user_id") int userId, @RequestBody User user) {
 		User userToUpdate = userService.getUserById(userId).orElseThrow(()-> new UserNotFoundException(NO_USER_FOUND_FOR_ID+userId));
 		userToUpdate.setUserName(user.getUserName());
-		return userService.addUser(userToUpdate);
+		return ResponseEntity.ok(userService.addUser(userToUpdate));
 	}
 }
